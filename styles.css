@@ -1,0 +1,318 @@
+:root {
+  --bg-color: #0f0c29;
+  --primary-color: #302b63;
+  --secondary-color: #24243e;
+  --accent-color: #00d2ff;
+  --gold: #ffd700;
+  --text-color: #ffffff;
+  --glass-bg: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --font-heading: 'Helvetica Neue', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-body);
+  background: linear-gradient(135deg, var(--bg-color), var(--primary-color), var(--secondary-color));
+  color: var(--text-color);
+  overflow-x: hidden;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* 粒子画布层 */
+#particle-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* 烟花画布层 */
+#firework-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 999;
+  pointer-events: none;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* --- 排版与发光字 --- */
+h1, h2, h3 {
+  font-family: var(--font-heading);
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.glow-text {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #fff;
+  text-shadow: 
+    0 0 5px #fff,
+    0 0 10px #fff,
+    0 0 20px var(--accent-color),
+    0 0 40px var(--accent-color),
+    0 0 80px var(--accent-color);
+  animation: pulse-glow 2s infinite alternate;
+}
+
+@keyframes pulse-glow {
+  from { text-shadow: 0 0 10px #fff, 0 0 20px var(--accent-color); }
+  to { text-shadow: 0 0 20px #fff, 0 0 40px var(--accent-color), 0 0 60px var(--accent-color); }
+}
+
+.section-title {
+  font-size: 2rem;
+  position: relative;
+  display: inline-block;
+  margin-bottom: 2rem;
+  background: linear-gradient(to right, #fff, var(--gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* --- 布局模块 --- */
+section {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 4rem;
+  opacity: 0; /* 初始隐藏，由JS控制显示 */
+  transform: translateY(30px);
+  transition: opacity 1s ease-out, transform 1s ease-out;
+}
+
+section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 英雄区域 (Hero) */
+#hero {
+  min-height: 100vh;
+  text-align: center;
+  position: relative;
+}
+
+.hero-content {
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  padding: 3rem;
+  border-radius: 20px;
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+  100% { transform: translateY(0px); }
+}
+
+/* 卡片通用样式 */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  width: 100%;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 1.5rem;
+  transition: transform 0.3s ease, background 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.card:hover {
+  transform: translateY(-10px) scale(1.02);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  border-color: var(--accent-color);
+}
+
+.card-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.card h3 {
+  font-size: 1.25rem;
+  color: var(--gold);
+  margin-bottom: 0.5rem;
+  text-align: left;
+}
+
+.card p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* 列表样式 (Expectations) */
+.timeline-list {
+  width: 100%;
+  max-width: 800px;
+}
+
+.list-item {
+  background: linear-gradient(90deg, rgba(255,255,255,0.05) 0%, transparent 100%);
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  border-left: 4px solid var(--accent-color);
+  border-radius: 0 10px 10px 0;
+  font-size: 1.1rem;
+  transition: margin-left 0.3s ease;
+}
+
+.list-item:hover {
+  margin-left: 10px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.1) 0%, transparent 100%);
+}
+
+/* 视频区域 */
+.video-wrapper {
+  width: 100%;
+  max-width: 800px;
+  background: #000;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 0 30px rgba(0, 210, 255, 0.3);
+  position: relative;
+  aspect-ratio: 16 / 9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.upload-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.7);
+  transition: opacity 0.3s;
+  z-index: 2;
+}
+
+.video-wrapper.has-video .upload-overlay {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.video-wrapper.has-video:hover .upload-overlay {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.custom-file-upload {
+  display: inline-block;
+  padding: 12px 24px;
+  cursor: pointer;
+  background: var(--primary-color);
+  border: 1px solid var(--accent-color);
+  border-radius: 30px;
+  color: #fff;
+  font-weight: bold;
+  transition: all 0.3s;
+}
+
+.custom-file-upload:hover {
+  background: var(--accent-color);
+  box-shadow: 0 0 15px var(--accent-color);
+}
+
+input[type="file"] {
+  display: none;
+}
+
+/* 音乐控制 */
+#music-control {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 50px;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 100;
+  font-size: 1.5rem;
+  transition: all 0.3s;
+  animation: spin 4s linear infinite;
+  animation-play-state: paused;
+}
+
+#music-control.playing {
+  background: var(--accent-color);
+  animation-play-state: running;
+  box-shadow: 0 0 20px var(--accent-color);
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+
+/* 响应式适配 */
+@media (max-width: 768px) {
+  .glow-text {
+    font-size: 2rem;
+  }
+  
+  .container {
+    padding: 1rem;
+  }
+  
+  section {
+    min-height: auto;
+    padding: 3rem 0;
+  }
+  
+  .video-wrapper {
+    aspect-ratio: auto;
+    height: 300px;
+  }
+}

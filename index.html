@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Tony盛长春</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- 画布层 -->
+    <canvas id="particle-canvas"></canvas>
+    <canvas id="firework-canvas"></canvas>
+
+    <!-- 主容器 -->
+    <div class="container">
+        
+        <!-- 模块0：Hero / 封面 -->
+        <section id="hero" class="visible">
+            <div class="hero-content">
+                <h1 id="hero-title" class="glow-text">Happy Birthday Tony!</h1>
+                <p id="hero-subtitle">Loading blessings...</p>
+                <p style="margin-top: 2rem; font-size: 0.9rem; opacity: 0.7;">(点击屏幕任意位置燃放烟花)</p>
+            </div>
+        </section>
+
+        <!-- 模块1：回忆寄语 -->
+        <section id="memories">
+            <h2 class="section-title">✨ 美好回忆 ✨</h2>
+            <div id="memories-grid" class="grid-container">
+                <!-- JS 动态插入卡片 -->
+            </div>
+        </section>
+
+        <!-- 模块2：共同期望 -->
+        <section id="expectations">
+            <h2 class="section-title">🚀 共同期望 🚀</h2>
+            <div id="expectations-list" class="timeline-list">
+                <!-- JS 动态插入列表 -->
+            </div>
+        </section>
+
+        <!-- 模块3：未来祝愿 -->
+        <section id="wishes">
+            <h2 class="section-title">🌟 未来祝愿 🌟</h2>
+            <div id="wishes-grid" class="grid-container">
+                <!-- JS 动态插入卡片 -->
+            </div>
+        </section>
+
+        <!-- 模块4：视频祝福 -->
+        <section id="video-section">
+            <h2 class="section-title">🎬 专属视频 🎬</h2>
+            <div class="video-wrapper has-video">
+                <video id="birthday-video" controls loop playsinline src="birthday.mov"></video>
+            </div>
+        </section>
+
+        <footer style="text-align: center; padding: 2rem; opacity: 0.6;">
+            <p>Designed for Tony盛长春</p>
+        </footer>
+    </div>
+
+    <!-- 音乐控制按钮 -->
+    <div id="music-control">🎵</div>
+
+    <!-- 引入脚本 -->
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
